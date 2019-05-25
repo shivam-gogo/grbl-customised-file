@@ -20,7 +20,7 @@
 */
 
 #include "grbl.h"
-
+#include <Stepper.h>
 // NOTE: Max line number is defined by the g-code standard to be 99999. It seems to be an
 // arbitrary value, and some GUIs may require more. So we increased it based on a max safe
 // value when converting a float (7.2 digit precision)s to an integer.
@@ -36,6 +36,23 @@ parser_state_t gc_state;
 parser_block_t gc_block;
 
 #define FAIL(status) return(status);
+const int stepsPerRevolution = 90;
+Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);
+
+void setup() {
+   myStepper.setSpeed(5);
+   Serial.begin(9600);
+}
+void _10_rotations(void){
+int i;
+for(i=0;i<=10;i++){	
+	Serial.println("clockwise");
+    myStepper.step(stepsPerRevolution);
+    delay(2000);
+}
+		
+}
+
 
 
 void gc_init() 
@@ -138,7 +155,11 @@ uint8_t gc_execute_line(char *line)
       case 'G':
         // Determine 'G' command and its modal group
         switch(int_value) {
-          case 10: case 28: case 30: case 92: 
+          case 10: setup();
+		  			_10_rotations();
+          			break;
+          
+		  case 28: case 30: case 92: 
             // Check for G10/28/30/92 being called with G0/1/2/3/38 on same block.
             // * G43.1 is also an axis command but is not explicitly defined this way.
             if (mantissa == 0) { // Ignore G28.1, G30.1, and G92.1
