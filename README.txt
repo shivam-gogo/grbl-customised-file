@@ -6,4 +6,4 @@ The motor is attached to digital pins 8 - 11 of Arduino.
 
 STEPPER MOTOR WILL ROTATE 10 TIMES WITH THE DELAY OF 2 SECONDS.
 
-BY CUSTOM G-CODE G-10
+BY CUSTOM G-CODE G10
